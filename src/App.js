@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
-import './App.css';
-import ApiService from './api/service';
-import { Home, SecondPage } from './pages';
+import React, { Component } from "react";
+import { Switch, Route } from "react-router-dom";
+import "./App.css";
+import ApiService from "./api/service";
+import { Home, SecondPage, Login, SignUp } from "./pages";
 
 class App extends Component {
   constructor() {
@@ -11,9 +11,9 @@ class App extends Component {
       products: [],
       displayedProducts: [],
       chart: {
-        products: [],
+        products: []
       },
-      loggedUser: true,
+      loggedUser: true
     };
   }
 
@@ -22,47 +22,76 @@ class App extends Component {
 
     this.setState({
       products,
-      displayedProducts: products,
+      displayedProducts: products
     });
   }
 
   addToChart = (productQuantity, productName, productPrice, productImage) => {
     const selectedProduct = {
-      productQuantity, productName, productPrice, productImage,
+      productQuantity,
+      productName,
+      productPrice,
+      productImage
     };
 
     const newChart = { ...this.state.chart };
 
     newChart.products.push(selectedProduct);
 
-    this.setState({
-      chart: newChart,
-    }, () => {
-      console.log(this.state.chart)
-    });
+    this.setState(
+      {
+        chart: newChart
+      },
+      () => {
+        console.log(this.state.chart);
+      }
+    );
   };
 
   filterProducts = searchValue => {
-    const filteredProducts = this.state.products.filter(product => (
+    const filteredProducts = this.state.products.filter(product =>
       product.productName.toLowerCase().includes(searchValue.toLowerCase())
-    ));
+    );
 
-    this.setState({ displayedProducts: filteredProducts })
-  }
+    this.setState({ displayedProducts: filteredProducts });
+  };
 
   render() {
-    console.log('RENDER DO APP CHAMADO!!')
+    console.log("RENDER DO APP CHAMADO!!");
     return (
       <Switch>
         <Route
           exact
           path="/"
-          render={props => <Home {...props} products={this.state.displayedProducts} addToChart={this.addToChart} filterMethod={this.filterProducts} />}
+          render={props => (
+            <Home
+              {...props}
+              products={this.state.displayedProducts}
+              addToChart={this.addToChart}
+              filterMethod={this.filterProducts}
+            />
+          )}
+        />
+        <Route
+          exact
+          path="/login"
+          render={props => (
+            <Login {...props} loggedUser={this.state.loggedUser} />
+          )}
+        />
+        <Route
+          exact
+          path="/signup"
+          render={props => (
+            <SignUp {...props} loggedUser={this.state.loggedUser} />
+          )}
         />
         <Route
           exact
           path="/new-route"
-          render={props => <SecondPage {...props} loggedUser={this.state.loggedUser} />}
+          render={props => (
+            <SecondPage {...props} loggedUser={this.state.loggedUser} />
+          )}
         />
       </Switch>
     );
